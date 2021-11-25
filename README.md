@@ -60,6 +60,27 @@ vagrant@vagrant:~$ dmesg > dmesg && cat dmesg | grep virtual*
 
 /sbin/sysctl -n fs.nr_open
 ```
+Дополню своими результатами:
+```
+root@vagrant:/home/vagrant# cat /proc/sys/fs/nr_open
+1048576
+root@vagrant:/home/vagrant# ulimit -a
+open files                      (-n) 1024
+root@vagrant:/home/vagrant# ulimit -aH
+open files                      (-n) 1048576
+root@vagrant:/home/vagrant# ulimit -Hn
+1048576
+root@vagrant:/home/vagrant# ulimit -Sn
+1024
+```
+Примечание: 
+Существует два типа ограничений: «жесткое ограничение» и «мягкое ограничение».  
+
+  * «Жесткое ограничение» для открытых файлов статически заданное значение, и может быть изменен  
+  * только «корневым» пользователем Linux;  
+  * «Мягкое ограничение» — это ограничение, которое может изменяться процессами динамически,  
+  * т. е. Во время выполнения, если процессу требуется больше открытых файлов, чем разрешено мягким пределом.  
+Вот [здесь](https://cyber-x.ru/%D0%BA%D0%B0%D0%BA-%D0%B8%D0%B7%D0%BC%D0%B5%D0%BD%D0%B8%D1%82%D1%8C-%D0%BE%D0%B3%D1%80%D0%B0%D0%BD%D0%B8%D1%87%D0%B5%D0%BD%D0%B8%D0%B5-%D0%BD%D0%B0-%D0%BE%D1%82%D0%BA%D1%80%D1%8B%D1%82%D0%B8%D0%B5/) ещё хорошая информация по поводу настройки ограничений ulimit. 
 
 ---
 
