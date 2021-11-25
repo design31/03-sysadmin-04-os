@@ -106,8 +106,7 @@ root        9396  0.0  0.3  11492  3396 pts/2    R+   16:27   0:00 ps aux
 ```
 Заходим в процесс:
 ```
-root@vagrant:~# nsenter --target 9394 --pid --mount
-root@vagrant:/# nsenter -t 1 --mount --pid -i bash
+root@vagrant:~# nsenter -t 9395 -p -m
 root@vagrant:/# ps
     PID TTY          TIME CMD
       1 pts/2    00:00:00 sleep
