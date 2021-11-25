@@ -88,6 +88,32 @@ root@vagrant:/home/vagrant# ulimit -Sn
 
 ### 6. Запустите любой долгоживущий процесс (не `ls`, который отработает мгновенно, а, например, `sleep 1h`) в отдельном неймспейсе процессов; покажите, что ваш процесс работает под PID 1 через `nsenter`. Для простоты работайте в данном задании под root (`sudo -i`). Под обычным пользователем требуются дополнительные опции (`--map-root-user`) и т.д.  
 
+Делаем всё под root:
+```
+vagrant@vagrant:~$ sudo -i
+```
+Запускаем sleep через unshare:  
+```
+root@vagrant:~# unshare -f --pid --mount-proc sleep 1h
+bg
+^Z
+[1]+  Stopped                 unshare -f --pid --mount-proc sleep 1h
+root@vagrant:~# ps aux
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root        9394  0.0  0.0   8080   592 pts/2    T    16:27   0:00 unshare -f --pid --mount-proc sleep 1h
+root        9395  0.0  0.0   8076   528 pts/2    S    16:27   0:00 sleep 1h
+root        9396  0.0  0.3  11492  3396 pts/2    R+   16:27   0:00 ps aux
+```
+Заходим в процесс:
+```
+root@vagrant:~# nsenter --target 9394 --pid --mount
+root@vagrant:/# nsenter -t 1 --mount --pid -i bash
+root@vagrant:/# ps
+    PID TTY          TIME CMD
+      1 pts/2    00:00:00 sleep
+      2 pts/2    00:00:00 bash
+      9 pts/2    00:00:00 ps
+```
 
 ---
 
