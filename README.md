@@ -118,7 +118,32 @@ root@vagrant:/# ps
 
 ### 7. Найдите информацию о том, что такое `:(){ :|:& };:`. Запустите эту команду в своей виртуальной машине Vagrant с Ubuntu 20.04 (**это важно, поведение в других ОС не проверялось**). Некоторое время все будет "плохо", после чего (минуты) – ОС должна стабилизироваться. Вызов `dmesg` расскажет, какой механизм помог автоматической стабилизации. Как настроен этот механизм по-умолчанию, и как изменить число процессов, которое можно создать в сессии?  
 
-
+Это т.называемая `fork bomb` - функция fork рекурсивно вызывающая сама себя до тех пор пока не забьёт все ресурсы системы.  
+dmesg сообщает:  
+```
+[Fri Nov 26 13:32:53 2021] cgroup: fork rejected by pids controller in /user.slice/user-1000.slice/session-3.scope
+```
+Здесь мы видим что сработал механизм сgroups - это способ ограничить ресурсы внутри конкретной cgroup(контрольной группы процессов).  
+Параметры по умолчанию можно глянуть командой `ulimit -a`:
+```
+vagrant@vagrant:~$ ulimit -a
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 3571
+max locked memory       (kbytes, -l) 65536
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 1024
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) 8192
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 3571
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
+```
 
 
 
