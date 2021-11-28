@@ -6,6 +6,41 @@
    * предусмотрите возможность добавления опций к запускаемому процессу через внешний файл (посмотрите, например, на `systemctl cat cron`),
    * удостоверьтесь, что с помощью systemctl процесс корректно стартует, завершается, а после перезагрузки автоматически поднимается.
 
+Поцесс установки думаю не надо описывать ) После распаковки архива создаю unit file для нового сервиса с таким содержимым:
+```
+[Unit]
+Description=Prometheus exporter for hardware and OS metrics
+Documentation=https://github.com/prometheus/node_exporter/blob/master/README.md
+
+[Service]
+EnvironmentFile=-/etc/default/node_exporter
+ExecStart=/bin/bash -c /home/vagrant/node_exporter-1.3.0.linux-amd64/node_exporter* $OPTIONS
+KillMode=process
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+```
+Позже выяснил что нужно было файл просто в бинарники кинуть и не мудрить со строкой ExecStart, но да ладно, и так работает.
+Перезапускаю демон сервисов: sudo systemctl daemon-reload  
+Стартую сервис: sudo systemctl start node_exporter  
+Добавляю его в автозагрузку: sudo systemctl enable  node_exporter
+Проверяю статус процесса:
+```
+sudo systemctl status node_exporter
+● node_exporter.service - Prometheus exporter for hardware and OS metrics
+     Loaded: loaded (/etc/systemd/system/node_exporter.service; enabled; vendor preset: enabled)
+     Active: active (running) since Sat 2021-11-27 16:09:43 UTC; 21h ago
+       Docs: https://github.com/prometheus/node_exporter/blob/master/README.md
+   Main PID: 1341 (node_exporter)
+      Tasks: 4 (limit: 1112)
+     Memory: 2.3M
+     CGroup: /system.slice/node_exporter.service
+             └─1341 /home/vagrant/node_exporter-1.3.0.linux-amd64/node_exporter
+```
+После перезагрузки результат тот же, сервис работает, всё ок.
+
 
 --- 
 
