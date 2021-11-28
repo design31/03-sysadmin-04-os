@@ -46,6 +46,40 @@ sudo systemctl status node_exporter
 
 ### 2. Ознакомьтесь с опциями node_exporter и выводом `/metrics` по-умолчанию. Приведите несколько опций, которые вы бы выбрали для базового мониторинга хоста по CPU, памяти, диску и сети.  
 
+Вывод метрик переваливает за 1000 строк. Если даже грепнуть по "node_" то 928 строк получится. Количество измеряемых параметров довольно велико.  
+Наиболее полезные в базовом наборе думаю будут такие:  
+```
+process_cpu_seconds_total
+node_schedstat_waiting_seconds_total
+node_pressure_cpu_waiting_seconds_total 
+node_memory_Percpu_bytes
+node_softnet_dropped_total
+node_softnet_processed_total
+node_memory_MemAvailable_bytes  
+node_memory_MemFree_bytes  
+node_memory_MemTotal_bytes
+node_memory_SwapCached_bytes  
+node_memory_SwapFree_bytes 
+node_memory_SwapTotal_bytes  
+node_netstat_Tcp_ActiveOpens
+node_netstat_Tcp_CurrEstab
+node_netstat_Tcp_PassiveOpens
+node_network_flags
+node_network_iface_id
+node_network_iface_link
+node_network_mtu_bytes
+node_network_receive_bytes_total
+node_network_speed_bytes
+node_network_transmit_bytes_total
+node_network_up
+node_disk_io_time_seconds_total
+node_disk_read_bytes_total
+node_disk_read_time_seconds_total
+node_disk_reads_completed_total
+node_disk_write_time_seconds_total
+node_disk_writes_completed_total
+node_disk_written_bytes_total
+```
 
 ---
 
